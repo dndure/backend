@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blog Generator<</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @-webkit-keyframes rotate {
+        from { -webkit-transform: rotate(0deg); }
+        to { -webkit-transform: rotate(360deg); }
+      }
+      .loading-spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: var(--color-clifford);
+        -webkit-animation: rotate 1s linear infinite;
+        -webkit-animation-name: rotate; 
+        -webkit-animation-duration: 1s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-iteration-count: infinite;
+        transition: all 0.3s ease-in-out;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: rotate 1s linear infinite;
+      }
+    </style>
+    <link href="./output.css" rel="stylesheet">
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100 font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-clifford text-white p-4 flex justify-between">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold">AI Blog Generator</h1>
+        </div>
+        <div>
+            <a href="#" class="text-white hover:underline">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto flex-grow mt-10 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+            <!-- Introduction Section -->
+            <div class="text-center py-20">
+                <h2 class="text-4xl font-bold mb-4">Welcome to the AI Blog Generator</h2>
+                <p class="text-lg text-gray-600">
+                    Generate blog posts effortlessly with the power of AI.
+                </p>
+            </div>
+            <br>
+            <!-- Youtube Section -->
+            <div>
+                <h2 class="text-2xl font-semibold mb-4">Enter your Youtube link to generate a blog post from it:</h2>
+                <div class="flex flex-col flex space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+                    <input id="youtube-link" type="url" placeholder="Enter Youtube link" class="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-clifford">
+                    <button id="generate-blog-post" class="bg-clifford text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300">Generate Blog Post</button> 
+                </div>  
+            </div>
+
+            <!-- Section for loading message or generated content -->
+                     <div id="loading-message" class="text-gray-500" style="display: none;">No blog post generated yet. Please enter a Youtube link and click "Generate Blog Post".</div>
+
+            <!-- Generated Blog Post Section -->
+            <section id="blog-post-section" class="mt-10 flex-grow">
+                <h2 class="text-2xl font-semibold mb-4">Generated Blog Post:</h2>
+                <div id="blog-post-content" class="bg-gray-100 p-4 rounded-lg shadow-md space-y-4">
+
+                    
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="container mx-auto text-center p-4 mt-10">
+            Dawda Ndure | &copy; 2026 AI Blog Generator. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('generate-blog-post').addEventListener('click', async () => {
+            const youtubeLink = document.getElementById('youtube-link').value;
+            const blogPostContent = document.getElementById('blog-post-content');
+
+            // Clear previous content and show loading message
+            blogPostContent.innerHTML = '<p class="text-gray-500">Generating blog post...</p>';
+
+            try {
+                const response = await fetch('/generate-blog-post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ youtubeLink }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate blog post');
+                }
+
+                const data = await response.json();
+                blogPostContent.innerHTML = `<h3 class="text-xl font-semibold mb-2">${data.title}</h3><p>${data.content}</p>`;
+            } catch (error) {
+                blogPostContent.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+            }
+        });
+    </script>   
+
+</body>
+</html>

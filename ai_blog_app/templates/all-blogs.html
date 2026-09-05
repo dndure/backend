@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+    </style>
+    <title>All Blogs Post</title>
+</head>
+<body class="bg-grey-100">
+
+        <!-- Navbar -->
+    <nav class="bg-clifford text-white p-4 flex justify-between">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold">AI Blog Generator</h1>
+        </div>
+        <div>
+            <a href="#" class="text-white hover:underline">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container mx-auto p-4 mt-10 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-lg p-6 max-w-3xl mx-auto duration-300 ease-in-out transform hover:scale-105">
+            <!-- Blog Posts Section-->
+             <section class="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                <h2 class="text-3xl font-bold mb-4">All Blog Posts</h2>
+                <div class="space-y-4">
+                    <!-- Blog Post 1 -->
+                    <div class="border p-4 rounded-lg hover:bg-gray-100 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2">Blog Post Title 1</h3>
+                        <p class="text-gray-700">This is a brief description of the first blog post. It provides an overview of the content.</p>
+                    </div>
+
+                    <!-- Blog Post 2 -->
+                    <div class="border p-4 rounded-lg hover:bg-gray-100 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2">Blog Post Title 2</h3>
+                        <p class="text-gray-700">This is a brief description of the second blog post. It provides an overview of the content.</p>
+                    </div>
+
+                    <!-- Blog Post 3 -->
+                    <div class="border p-4 rounded-lg hover:bg-gray-100 transition duration-300">
+                        <h3 class="text-xl font-semibold mb-2">Blog Post Title 3</h3>
+                        <p class="text-gray-700">This is a brief description of the third blog post. It provides an overview of the content.</p>
+                    </div>
+                    <!-- Repeat the blog post structure as needed -->
+            </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="container mx-auto text-center p-4 mt-10">
+            Dawda Ndure | &copy; 2026 AI Blog Generator. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
