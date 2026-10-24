@@ -13,32 +13,32 @@
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100 font-sans antialiased">
 
-    <!-- Navbar -->
     <nav class="bg-clifford text-white p-4 flex justify-between">
         <div class="container mx-auto">
             <h1 class="text-3xl font-bold">AI Blog Generator</h1>
         </div>
         <div>
-            <a href="#" class="text-white hover:underline">Login</a> 
-            <a href="#" class="text-white hover:underline">SignUp</a>
+            <a href="/blog/login/" class="text-white hover:underline">Login</a> 
+            <a href="/blog/signup/" class="text-white hover:underline">SignUp</a>
         </div>
     </nav>
 
-    <! -- Main Content -->
     <div class="container mx-auto flex-grow mt-10 px-4 sm:px-6 lg:px-8">
         <div class="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-            <!-- Login Section -->
             <div class="text-center py-20">
                 <h2 class="text-4xl font-bold mb-4">Login to Your Account</h2>
                 <p class="text-lg text-gray-600">
                     Please enter your credentials to access the AI Blog Generator.
                 </p>
-                <form class="mt-6">
+                {% if error %}<p class="text-red-600 mt-4">{{ error }}</p>{% endif %}
+                {% if success %}<p class="text-green-600 mt-4">{{ success }}</p>{% endif %}
+                <form method="post" class="mt-6">
+                    {% csrf_token %}
                     <div class="mb-4">
-                        <input type="text" placeholder="Username" id="username" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-clifford">
+                        <input type="text" name="username" placeholder="Username" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-clifford" required>
                     </div>
                     <div class="mb-4">
-                        <input type="password" placeholder="Password" id="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-clifford">
+                        <input type="password" name="password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-clifford" required>
                     </div>
                     <button type="submit" class="w-full bg-clifford text-white py-2 rounded-lg hover:bg-red-700 transition duration-300">Login</button>
                 </form>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Blog Generator<</title>
+    <title>AI Blog Generator</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
       @theme {
@@ -21,10 +21,6 @@
         border: 4px solid rgba(0, 0, 0, 0.1);
         border-left-color: var(--color-clifford);
         -webkit-animation: rotate 1s linear infinite;
-        -webkit-animation-name: rotate; 
-        -webkit-animation-duration: 1s;
-        -webkit-animation-timing-function: linear;
-        -webkit-animation-iteration-count: infinite;
         transition: all 0.3s ease-in-out;
         border-radius: 50%;
         width: 40px;
@@ -32,17 +28,17 @@
         animation: rotate 1s linear infinite;
       }
     </style>
-    <link href="./output.css" rel="stylesheet">
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100 font-sans antialiased">
 
     <!-- Navbar -->
     <nav class="bg-clifford text-white p-4 flex justify-between">
         <div class="container mx-auto">
-            <h1 class="text-3xl font-bold">AI Blog Generator</h1>
+            <h1 class="text-3xl font-bold"><a href="/blog/" class="text-white hover:underline">AI Blog Generator</a></h1>
         </div>
         <div>
-            <a href="#" class="text-white hover:underline">Logout</a>
+            <a href="#" class="text-white hover:underline">Welcome {{ user.username }}</a> 
+            <a href="/blog/logout/" class="text-white hover:underline">Logout</a>
         </div>
     </nav>
 
@@ -62,7 +58,7 @@
                 <h2 class="text-2xl font-semibold mb-4">Enter your Youtube link to generate a blog post from it:</h2>
                 <div class="flex flex-col flex space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                     <input id="youtube-link" type="url" placeholder="Enter Youtube link" class="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-clifford">
-                    <button id="generate-blog-post" class="bg-clifford text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300">Generate Blog Post</button> 
+                    <button id="generateBlogButton" class="bg-clifford text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300">Generate Blog Post</button> 
                 </div>  
             </div>
 
@@ -88,30 +84,45 @@
     </footer>
 
     <script>
-        document.getElementById('generate-blog-post').addEventListener('click', async () => {
+        document.getElementById('generateBlogButton').addEventListener('click', async () => {
             const youtubeLink = document.getElementById('youtube-link').value;
+            const loadingMessage = document.getElementById('loading-message');
+            loadingMessage.style.display = 'block';
             const blogPostContent = document.getElementById('blog-post-content');
 
-            // Clear previous content and show loading message
             blogPostContent.innerHTML = '<p class="text-gray-500">Generating blog post...</p>';
 
-            try {
-                const response = await fetch('/generate-blog-post', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ youtubeLink }),
-                });
+            if(youtubeLink){
+                loadingIndicator.classList.remove('hidden');
+                blogContent.innerHTML = ''; // Clear previous content
 
-                if (!response.ok) {
-                    throw new Error('Failed to generate blog post');
+                const endpointUrl = '/blog/generate-blog/';
+                
+                try {
+                    const response = await fetch(endpointUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ youtube_link: youtubeLink })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    blogPostContent.innerHTML = `<h3 class="text-xl font-semibold mb-2">${data.title}</h3><p>${data.content}</p>`;
+                } catch (error) {
+                    console.error('Error generating blog post:', error);
+                    blogPostContent.innerHTML = '<p class="text-red-600">Error generating blog post. Please try again.</p>';
+                } finally {
+                    loadingMessage.style.display = 'none';
                 }
-
-                const data = await response.json();
-                blogPostContent.innerHTML = `<h3 class="text-xl font-semibold mb-2">${data.title}</h3><p>${data.content}</p>`;
-            } catch (error) {
-                blogPostContent.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+            else {
+                alert('Please enter a valid Youtube link.');
+            }
             }
         });
     </script>   

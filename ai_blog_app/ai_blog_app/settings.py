@@ -10,6 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os, dj_database_url; 
+from dotenv import load_dotenv;
+
+load_dotenv()  # Load environment variables from .env file
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,8 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
+load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ypluei_i@wsgeh(vmfb-^6xkyv#_je^^)r0l-auq5(o@tmj#4&'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,10 +80,7 @@ WSGI_APPLICATION = 'ai_blog_app.wsgi.application'
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
 
 
@@ -126,3 +129,9 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ # Redirect to home page after login
+LOGIN_URL = '/blog/login/'
+LOGIN_REDIRECT_URL = '/'
